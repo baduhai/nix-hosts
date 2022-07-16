@@ -46,10 +46,12 @@
 
   # Enable the X11 windowing system.
   services.xserver.enable = true;
+  #services.xserver.drivers.amdgpu.deviceSection = {  }; # Undocumented setting, fix RDNA2 colour/gamma modesetting bug workaround for X
 
   # Enable the KDE Plasma Desktop Environment.
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.displayManager.defaultSession = "plasmawayland";
+  services.xserver.displayManager.sddm.settings = { Theme = { CursorTheme = "breeze_cursors"; }; };
   services.xserver.desktopManager.plasma5.enable = true;
 
   # Configure keymap in X11

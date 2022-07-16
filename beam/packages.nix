@@ -20,7 +20,6 @@
     vscode-fhs
     vagrant
     # Gaming related packages
-    goverlay
     retroarchFull
     mangohud
     heroic
@@ -61,6 +60,7 @@
     yakuake
     bitwarden
     filelight
+    easyeffects
     # Other packages
     dconf
     ankacoder
