@@ -1,84 +1,104 @@
-# Main configuration file
+# Main configuration file.
 { config, pkgs, ... }:
 
 {
   imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./packages.nix
-      ./users.nix
+    [ 
+      ./hardware-configuration.nix # Include the results of the hardware scan.
+      ./packages.nix               # Packages sub-config
+      ./users.nix                  # Users sub-config
     ];
 
-  # Bootloader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
-  boot.loader.timeout = 1;
-  boot.plymouth.enable = true;
-
-  # Use latest kernel
-  boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  # Configure networking
-  networking.hostName = "beam";
-  networking.networkmanager.enable = true;
-
-  # Enable bluetooth
-  hardware.bluetooth.enable = true;
-
-  # Set your time zone.
-  time.timeZone = "Europe/Berlin";
-
-  # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
-
-  i18n.extraLocaleSettings = {
-    LC_ADDRESS = "en_IE.UTF-8";
-    LC_IDENTIFICATION = "en_IE.UTF-8";
-    LC_MEASUREMENT = "en_IE.UTF-8";
-    LC_MONETARY = "en_IE.UTF-8";
-    LC_NAME = "en_IE.UTF-8";
-    LC_NUMERIC = "en_IE.UTF-8";
-    LC_PAPER = "en_IE.UTF-8";
-    LC_TELEPHONE = "en_IE.UTF-8";
-    LC_TIME = "en_IE.UTF-8";
+  # Configre boot preocess.
+  boot = {
+    plymouth.enable = true;                   # Boot animations
+    kernelPackages  = pkgs.linuxPackages_zen; # Latest zen kernel
+    loader          = {                       # Configure systemd-boot
+      timeout             = 1;
+      systemd-boot.enable = true;
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint     = "/boot/efi";
+      };
+    };
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
-  #services.xserver.drivers.amdgpu.deviceSection = {  }; # Undocumented setting, fix RDNA2 colour/gamma modesetting bug workaround for X
-
-  # Enable the KDE Plasma Desktop Environment.
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.displayManager.defaultSession = "plasmawayland";
-  services.xserver.displayManager.sddm.settings = { Theme = { CursorTheme = "breeze_cursors"; }; };
-  services.xserver.desktopManager.plasma5.enable = true;
-
-  # Configure keymap in X11
-  services.xserver = {
-    layout = "us";
-    xkbVariant = "altgr-intl";
+  # Configure networking.
+  networking = {
+    networkmanager.enable = true;
+    hostName              = "beam";
   };
 
-  # Enable CUPS to print documents.
-  services.printing.enable = true;
-
-  # Enable sound with pipewire.
+  # Hardware configuration.
   sound.enable = true;
-  hardware.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-    jack.enable = true;
-    wireplumber.enable = true;
+  hardware     = {
+   bluetooth.enable       = true; # Enable bluetooth.
+   opengl.driSupport32Bit = true;  # Needed for games.
+   steam-hardware.enable  = true;  # Allow steam to manage controllers.
+   pulseaudio.enable      = false; # Disable pulseaudio.
+ };
+  
+  # Locallisation properties.
+  i18n.defaultLocale       = "en_US.UTF-8";
+  time.timeZone            = "Europe/Berlin";
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS        = "en_IE.UTF-8";
+    LC_IDENTIFICATION = "en_IE.UTF-8";
+    LC_MEASUREMENT    = "en_IE.UTF-8";
+    LC_MONETARY       = "en_IE.UTF-8";
+    LC_NAME           = "en_IE.UTF-8";
+    LC_NUMERIC        = "en_IE.UTF-8";
+    LC_PAPER          = "en_IE.UTF-8";
+    LC_TELEPHONE      = "en_IE.UTF-8";
+    LC_TIME           = "en_IE.UTF-8";
   };
 
-  # Garbage collector (trim bootable configurations)
-  nix.gc.automatic = true;
-  nix.gc.options = "--delete-older-than 8d";
+  # Configuring services.
+  services = {
+  	printing.enable = true;                         # Enable CUPS
+  	pipewire        = {                             # Sound server
+  	    enable             = true;
+  	    alsa.enable        = true;
+  	    alsa.support32Bit  = true;
+  	    pulse.enable       = true;
+  	    jack.enable        = true;
+  	    wireplumber.enable = true;
+  	};
+  	xserver         = {                             # Display server configuration
+      layout                        = "us";         # kb layout.
+      enable                        = true;
+      desktopManager.plasma5.enable = true;         # Enable KDE Plasma.
+      xkbVariant                    = "altgr-intl"; # kb layout variant.
+      displayManager                = {
+      	defaultSession = "plasmawayland";           # Set plasma wayland as default
+      	sddm           = {
+      	  enable   = true;
+      	  settings = {
+      	  	Theme = {
+      	  	  CursorTheme = "breeze_cursors";
+      	  	};
+      	  };
+      	};
+      };
+  	};
+  };
 
-  system.stateVersion = "22.05";
+  # Piperwire needs this for some reason.
+  security.rtkit.enable      = true;
+
+  # Garbage collector (trim bootable configurations).
+  nix.gc = {
+    automatic = true;
+    options   = "--delete-older-than 8d";
+  };
+
+  # 
+  system = {
+    stateVersion = "22.05"; # The description for this is super confusing, essentially it's the version of nix(the language) and the version of packages that are compatible with this version.
+    autoUpgrade  = {
+      enable  = true;                                  # Enable auto updates. Might manually set this to a service the executes on poweroff.
+      dates   = "12:00";                               # At midday, since default is 0400.
+      channel = "https://nixos.org/channels/unstable"; # We rolling release now.
+    };
+  };
 }

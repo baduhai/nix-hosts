@@ -1,13 +1,16 @@
-# Configuration file purely for packages
+# Configuration file purely for packages.
 { config, pkgs, ... }:
 
 {
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
+  # Configure nix(the package manager).
+  nixpkgs.config = {
+    allowUnfree = true;                                # Allow unfree packages.
+    permittedInsecurePackages = [ "electron-11.5.0" ]; # Fuckin discord.
+  };
 
-  # Packages
+  # Packages.
   environment.systemPackages = with pkgs; [
-    # Terminal tools and utilities
+    # Terminal tools and utilities.
     micro
     wget
     git
@@ -16,10 +19,10 @@
     neofetch
     fish
     protonup
-    # Development tools
+    # Development tools.
     vscode-fhs
     vagrant
-    # Gaming related packages
+    # Gaming related packages.
     retroarchFull
     mangohud
     heroic
@@ -32,7 +35,7 @@
     itch
     yuzu-ea
     sc-controller
-    # Programs
+    # Programs.
     kate
     qview
     gimp
@@ -61,17 +64,8 @@
     bitwarden
     filelight
     easyeffects
-    # Other packages
+    # Other packages.
     dconf
     ankacoder
   ];
-  
-  # Fuckin Discord...
-  nixpkgs.config.permittedInsecurePackages = [
-    "electron-11.5.0"
-  ];
-  
-  # Settings needed for steam
-  hardware.opengl.driSupport32Bit = true;
-  hardware.steam-hardware.enable = true;
 }
