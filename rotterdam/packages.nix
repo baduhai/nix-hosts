@@ -77,16 +77,15 @@
   programs.kdeconnect.enable = true;
 
   # Fonts.
-  fonts.fonts = with pkgs; [
-	inter
-  	nerdfonts
-  ];
+  fonts = {
+    fontDir.enable = true;
+  	fonts = with pkgs; [
+	  inter
+  	  nerdfonts
+    ];
+  };
 
   # Managing shells
   programs.fish.enable = true;
   programs.zsh.enable = true;
-
-
-  # Make sure all applications can view fonts
-  fonts.fontDir.enable = true;
 }
