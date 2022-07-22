@@ -1,5 +1,5 @@
 # Configuration file purely for packages.
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Configure nix(the package manager).
@@ -17,8 +17,8 @@
     tmux
     pfetch
     neofetch
-    fish
     protonup
+    kitty
     # Development tools.
     vscode-fhs
     vagrant
@@ -63,9 +63,30 @@
     yakuake
     bitwarden
     filelight
+    inkscape
     easyeffects
+    discover
     # Other packages.
     dconf
     ankacoder
+    appimage-run
+    p7zip
   ];
+
+  # For some reason kdeconnect needs its own thing.
+  programs.kdeconnect.enable = true;
+
+  # Fonts.
+  fonts.fonts = with pkgs; [
+	inter
+  	nerdfonts
+  ];
+
+  # Managing shells
+  programs.fish.enable = true;
+  programs.zsh.enable = true;
+
+
+  # Make sure all applications can view fonts
+  fonts.fontDir.enable = true;
 }
