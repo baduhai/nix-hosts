@@ -145,9 +145,11 @@
   	  	  };
   	  	  functions = {
   	  	  	fish_greeting = ''
-              #set -x PF_INFO ascii os kernel uptime pkgs memory shell palette
-  	  	  	  #eval /var/run/current-system/sw/bin/pfetch
+              set -x PF_INFO ascii os kernel uptime pkgs memory shell palette
+  	  	  	  eval $HOME/.scripts/pfetch
   	  	  	'';
+  	  	  	pacin = "nix-env -iA nixos.$argv";
+  	  	  	pacre = "nix-env -e $argv";
   	  	  };
   	  	  shellInit = ''
             set -g theme_date_format "+%H:%M"
@@ -156,7 +158,8 @@
             set -g theme_color_scheme dark
             set -g theme_nerd_fonts yes
             set -g theme_display_git_default_branch yes
-            set --global --export FONTCONFIG_FILE ${pkgs.fontconfig.out}/etc/fonts/fonts.conf
+            set -g -x PF_INFO ascii os kernel uptime pkgs memory shell palette
+            set -g -x FONTCONFIG_FILE ${pkgs.fontconfig.out}/etc/fonts/fonts.conf
   	  	  '';
   	  	  plugins  = [
   	  	  	{
@@ -192,13 +195,13 @@
   	  	  	tab_switch_strategy = "left";
   	  	  	tab_bar_style = "powerline";
   	  	  	tab_powerline_style = "slanted";
-  	  	  	tab_bar_background = "#444";
-  	  	  	tab_bar_margin_color = "#111";
-  	  	  	# shell = "fish";
+  	  	  	tab_bar_background = "#3b3b3b";
+  	  	  	tab_bar_margin_color = "#3b3b3b";
+  	  	  	tab_title_template = "{index}: {f'{title[:6]}…{title[-6:]}' if title.rindex(title[-1]) + 1 > 13 else title}";
   	  	  	remember_window_size = "no";
   	  	  	initial_window_width = "120c";
   	  	  	initial_window_height = "42c";
-  	  	  	confirm_os_window_close = "-1";
+  	  	  	confirm_os_window_close = "-2";
   	  	  };
   	  	};
   	  	# Git configuration.

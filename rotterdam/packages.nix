@@ -15,7 +15,6 @@
     wget
     git
     tmux
-    pfetch
     neofetch
     protonup
     kitty
@@ -69,8 +68,11 @@
     # Other packages.
     dconf
     ankacoder
-    appimage-run
     p7zip
+    # Customising appimage appimage deps.
+    (appimage-run.override {
+      extraPkgs = pkgs: [ pkgs.libthai ];
+    })
   ];
 
   # For some reason kdeconnect needs its own thing.
