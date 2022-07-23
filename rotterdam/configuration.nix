@@ -27,6 +27,9 @@
   networking = {
     networkmanager.enable = true;
     hostName = "rotterdam";
+    firewall = {
+      enable = true;
+    };
   };
 
   # Hardware configuration.
@@ -57,6 +60,7 @@
   services = {
   	printing.enable = true; # Enable CUPS.
   	fwupd.enable = true;    # Enable fwupd for firmware updates.
+    openssh.enable = true;  # Enable SSH.
   	pipewire = {            # Sound server.
   	    enable = true;
   	    alsa.enable = true;
@@ -83,6 +87,9 @@
       	  settings = {
       	  	Theme = {
       	  	  CursorTheme = "breeze_cursors";
+      	  	};
+      	  	X11 = {
+      	  	  UserAuthFile = ".local/share/sddm/Xauthority";
       	  	};
       	  };
       	};
