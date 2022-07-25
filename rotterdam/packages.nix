@@ -18,8 +18,10 @@
     neofetch
     protonup
     kitty
+    p7zip
     # Development tools.
     vscode-fhs
+    virt-manager
     vagrant
     # Gaming related packages.
     retroarchFull
@@ -31,7 +33,7 @@
     steam
     amdvlk
     steam-run
-    itch
+    #itch
     yuzu-ea
     sc-controller
     # Programs.
@@ -64,30 +66,26 @@
     filelight
     inkscape
     easyeffects
-    discover
-    # Other packages.
-    dconf
-    ankacoder
-    p7zip
     # Customising appimage appimage deps.
     (appimage-run.override {
       extraPkgs = pkgs: [ pkgs.libthai ];
     })
   ];
+  
+  # Managing shells
+  programs.fish.enable = true;
+  programs.zsh.enable = true;
 
-  # For some reason kdeconnect needs its own thing.
+  # Misc program management.
   programs.kdeconnect.enable = true;
+  programs.dconf.enable = true;
 
   # Fonts.
   fonts = {
     fontDir.enable = true;
   	fonts = with pkgs; [
 	  inter
-  	  nerdfonts
+  	  (nerdfonts.override { fonts = [ "Hack" ]; })
     ];
   };
-
-  # Managing shells
-  programs.fish.enable = true;
-  programs.zsh.enable = true;
 }

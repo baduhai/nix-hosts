@@ -99,6 +99,7 @@
 
   # Miscellaneous options
   security.rtkit.enable = true;
+  virtualisation.libvirtd.enable = true;
 
   # Garbage collector (trim bootable configurations).
   nix.gc = {
