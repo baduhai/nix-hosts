@@ -1,16 +1,15 @@
-# Configuration file purely for packages.
 { config, pkgs, lib, ... }:
 
 {
-  # Configure nix(the package manager).
+  # Configure nixpkgs
   nixpkgs.config = {
-    allowUnfree = true;                                # Allow unfree packages.
-    permittedInsecurePackages = [ "electron-11.5.0" ]; # Fuckin discord.
+    allowUnfree = true;                                # Allow unfree packages
+    permittedInsecurePackages = [ "electron-11.5.0" ]; # Fuckin discord
   };
 
   # Packages.
   environment.systemPackages = with pkgs; [
-    # Terminal tools and utilities.
+    # Terminal tools and utilities
     micro
     wget
     git
@@ -19,11 +18,13 @@
     protonup
     kitty
     p7zip
-    # Development tools.
+    gocryptfs
+    usbimager
+    # Development tools
     vscode-fhs
     virt-manager
     vagrant
-    # Gaming related packages.
+    # Gaming related packages
     retroarchFull
     mangohud
     heroic
@@ -33,10 +34,10 @@
     steam
     amdvlk
     steam-run
-    #itch
+    itch
     yuzu-ea
     sc-controller
-    # Programs.
+    # Programs
     kate
     qview
     gimp
@@ -47,6 +48,7 @@
     obs-studio
     obs-studio-plugins.obs-vkcapture
     spotify
+    psst
     mpv
     kalendar
     onlyoffice-bin
@@ -66,7 +68,9 @@
     filelight
     inkscape
     easyeffects
-    # Customising appimage appimage deps.
+    prusa-slicer
+    solvespace
+    # Customising appimage appimage deps
     (appimage-run.override {
       extraPkgs = pkgs: [ pkgs.libthai ];
     })
@@ -76,11 +80,11 @@
   programs.fish.enable = true;
   programs.zsh.enable = true;
 
-  # Misc program management.
+  # Misc program management
   programs.kdeconnect.enable = true;
   programs.dconf.enable = true;
 
-  # Fonts.
+  # Fonts
   fonts = {
     fontDir.enable = true;
   	fonts = with pkgs; [

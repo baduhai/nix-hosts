@@ -1,19 +1,19 @@
-# Main configuration file.
 { config, pkgs, ... }:
 
 {
   imports =
     [ 
-      ./hardware-configuration.nix # Include the results of the hardware scan.
-      ./packages.nix               # Packages sub-config
-      ./users.nix                  # Users sub-config
+      ./hardware-configuration.nix
+      ./packages.nix
+      ./users.nix
     ];
 
-  # Configre boot preocess.
+  # Configre boot preocess
   boot = {
-    plymouth.enable = true;                  # Boot animations
+    plymouth.enable = true; # Boot animations
     kernelPackages = pkgs.linuxPackages_zen; # Latest zen kernel
-    loader = {                               #  Configure systemd-boot
+    kernelModules = [ "i2c-dev" "i2c-piix4" ];
+    loader = { #  Configure boot loader(systemd-boot)
       timeout = 1;
       systemd-boot.enable = true;
       efi = {
@@ -23,7 +23,7 @@
     };
   };
 
-  # Configure networking.
+  # Configure networking
   networking = {
     networkmanager.enable = true;
     hostName = "rotterdam";
@@ -32,16 +32,16 @@
     };
   };
 
-  # Hardware configuration.
+  # Hardware configuration
   sound.enable = true;
   hardware = {
-   bluetooth.enable = true;       # Enable bluetooth.
-   opengl.driSupport32Bit = true; # Needed for games.
-   steam-hardware.enable = true;  # Allow steam to manage controllers.
-   pulseaudio.enable = false;     # Disable pulseaudio.
+   bluetooth.enable = true; # Enable bluetooth
+   opengl.driSupport32Bit = true; # Needed for games
+   steam-hardware.enable = true; # Allow steam to manage controllers
+   pulseaudio.enable = false; # Disable pulseaudio
  };
   
-  # Locallisation properties.
+  # Locallisation properties
   i18n.defaultLocale = "en_US.UTF-8";
   time.timeZone = "Europe/Berlin";
   i18n.extraLocaleSettings = {
@@ -56,12 +56,12 @@
     LC_TIME = "en_IE.UTF-8";
   };
 
-  # Configuring services.
+  # Configuring services
   services = {
-  	printing.enable = true; # Enable CUPS.
-  	fwupd.enable = true;    # Enable fwupd for firmware updates.
-    openssh.enable = true;  # Enable SSH.
-  	pipewire = {            # Sound server.
+  	printing.enable = true; # Enable CUPS
+  	fwupd.enable = true; # Enable fwupd for firmware updates
+    openssh.enable = true; # Enable SSH
+  	pipewire = { # Sound server
   	    enable = true;
   	    alsa.enable = true;
   	    alsa.support32Bit = true;
@@ -69,19 +69,16 @@
   	    jack.enable = true;
   	    wireplumber.enable = true;
   	};
-  	udev.extraRules = ''
-  	  KERNEL=="card0", SUBSYSTEM=="drm", DRIVERS=="amdgpu", ATTR{device/power_dpm_force_performance_level}="high"
-  	'';
-  	xserver = {                           # Display server configuration.
+  	xserver = { # Display server configuration
       enable = true;
-      layout = "us";                      # kb layout.
-      xkbVariant = "altgr-intl";          # kb layout variant.
-      desktopManager.plasma5 = {          # Enable KDE Plasma.
+      layout = "us"; # kb layout
+      xkbVariant = "altgr-intl"; # kb layout variant
+      desktopManager.plasma5 = { # Enable KDE Plasma
       	enable     = true;
       	supportDDC = true;
       };
       displayManager = {
-      	defaultSession = "plasmawayland"; # Set plasma wayland as default.
+      	defaultSession = "plasmawayland"; # Set plasma wayland as default
       	sddm = {
       	  enable = true;
       	  settings = {
@@ -99,21 +96,25 @@
 
   # Miscellaneous options
   security.rtkit.enable = true;
-  virtualisation.libvirtd.enable = true;
 
-  # Garbage collector (trim bootable configurations).
-  nix.gc = {
-    automatic = true;
-    options = "--delete-older-than 8d";
+  # VIrtualisation support
+  virtualisation = {
+  	libvirtd.enable = true;
+  	docker.enable = true;
   };
 
-  # 
-  system = {
-    stateVersion = "22.05";                            # Essentially the version of the nix language(not the system).
-    autoUpgrade = {
-      enable = true;                                   # Enable auto updates. Might manually set this to a service the executes on poweroff.
-      dates = "20:00";                                 # At 200-, since default is 0400.
-      channel = "https://nixos.org/channels/unstable"; # We rolling release now.
+  # Configure nix(the package manager)
+  nix = {
+    extraOptions = ''
+      experimental-features = nix-command
+      experimental-features = nix-command flakes
+     '';
+  	gc = {
+      automatic = true;
+      options = "--delete-older-than 8d";
     };
   };
+
+  system.stateVersion = "22.05"; # Essentially the version of the nix language(not the system)
+    
 }
