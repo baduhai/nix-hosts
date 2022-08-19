@@ -16,7 +16,6 @@
     cinny-desktop
     cura
     discord
-    easyeffects
     element-desktop
     fd
     filelight
