@@ -1,95 +1,101 @@
 { config, pkgs, lib, ... }:
 
 {
-  # Configure nixpkgs
   nixpkgs.config = {
-    allowUnfree = true;                                # Allow unfree packages
+    allowUnfree = true;
     permittedInsecurePackages = [ "electron-11.5.0" ]; # Fuckin discord
   };
 
-  # Packages.
   environment.systemPackages = with pkgs; [
-    # Terminal tools and utilities
-    micro
-    wget
-    git
-    tmux
-    neofetch
-    protonup
-    kitty
-    p7zip
-    gocryptfs
-    usbimager
-    # Development tools
-    vscode-fhs
-    virt-manager
-    vagrant
-    # Gaming related packages
-    retroarchFull
-    mangohud
-    heroic
-    polymc
-    rpcs3
-    space-cadet-pinball
-    steam
     amdvlk
-    steam-run
-    itch
-    yuzu-ea
-    sc-controller
-    # Programs
-    kate
-    qview
+    arduino
+    ark
+    bat
+    bitwarden
+    chatterino2
+    cinny-desktop
+    cura
+    discord
+    easyeffects
+    element-desktop
+    fd
+    filelight
+    firefox-wayland
+    fzf
     gimp
+    git
+    gnupg
+    gocryptfs
+    helvum
+    heroic
+    home-manager
+    inkscape
+    itch
+    kalendar
+    kate
+    kitty
     kolourpaint
-    firefox
-    thunderbird
-    ungoogled-chromium
+    mangohud
+    megasync
+    micro
+    mpv
+    neofetch
     obs-studio
     obs-studio-plugins.obs-vkcapture
-    spotify
-    psst
-    mpv
-    kalendar
     onlyoffice-bin
-    ark
-    kcalc
-    discord
-    element-desktop
-    megasync
-    qbittorrent
-    signal-desktop
-    tdesktop
-    helvum
+    openrgb
+    p7zip
     partition-manager
-    ventoy-bin
-    yakuake
-    bitwarden
-    filelight
-    inkscape
-    easyeffects
-    prusa-slicer
+    pass-wayland
+    platformio
+    polymc
+    protonup
+    # prusa-slicer
+    psst
+    qbittorrent
+    qview
+    retroarchFull
+    rpcs3
+    sc-controller
+    signal-desktop
     solvespace
-    # Customising appimage appimage deps
+    space-cadet-pinball
+    spotify
+    steam
+    steam-run
+    streamlink-twitch-gui-bin
+    tdesktop
+    thunderbird-wayland
+    tmux
+    ungoogled-chromium
+    usbutils
+    vagrant
+    ventoy-bin
+    virt-manager
+    vscode-fhs
+    wget
+    yakuake
+    yuzu-ea
     (appimage-run.override {
-      extraPkgs = pkgs: [ pkgs.libthai ];
+      extraPkgs = pkgs: [  ];
     })
   ];
-  
-  # Managing shells
+
   programs.fish.enable = true;
-  programs.zsh.enable = true;
-
-  # Misc program management
-  programs.kdeconnect.enable = true;
   programs.dconf.enable = true;
+  programs.droidcam.enable = true;
+  programs.kdeconnect.enable = true;
+  programs.gnupg.agent = {
+    enable = true;
+    enableSSHSupport = true;
+    pinentryFlavor = "qt";
+  };
 
-  # Fonts
   fonts = {
     fontDir.enable = true;
-  	fonts = with pkgs; [
-	  inter
-  	  (nerdfonts.override { fonts = [ "Hack" ]; })
+    fonts = with pkgs; [
+    inter
+      (nerdfonts.override { fonts = [ "Hack" ]; })
     ];
   };
 }

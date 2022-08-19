@@ -6,7 +6,7 @@
     ./packages.nix
     ./users.nix
   ];
-  
+
   boot = {
     plymouth.enable = true;
     kernelPackages = pkgs.linuxPackages_zen;
@@ -43,7 +43,7 @@
    bluetooth.enable = true;
    pulseaudio.enable = false;
   };
-  
+
   time.timeZone = "Europe/Berlin";
   i18n = {
     defaultLocale = "en_US.UTF-8";
@@ -68,8 +68,8 @@
       daemon.enable = true;
       updater = {
         enable = true;
-      	interval = "*-*-* 11:00:00";
-      	frequency = 1;
+        interval = "*-*-* 11:00:00";
+        frequency = 1;
       };
     };
     pipewire = {
@@ -82,15 +82,13 @@
     };
     xserver = {
       enable = true;
-      excludePackages = ( with pkgs; [ xterm ]);
       layout = "us";
       xkbVariant = "altgr-intl";
-      desktopManager = {
-        plasma5 = {
-          enable     = true;
-          supportDDC = true;
-          excludePackages = ( with pkgs.plasma5Packages; [ elisa gwenview oxygen ]);
-        };
+      excludePackages = ( with pkgs; [ xterm ]);
+      desktopManager.plasma5 = {
+        enable     = true;
+        supportDDC = true;
+        excludePackages = ( with pkgs.plasma5Packages; [ elisa gwenview oxygen khelpcenter ]);
       };
       displayManager = {
         defaultSession = "plasmawayland";
@@ -127,5 +125,5 @@
     };
   };
 
-  system.stateVersion = "22.05";    
+  system.stateVersion = "22.05";
 }
