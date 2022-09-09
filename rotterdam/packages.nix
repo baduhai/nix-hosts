@@ -58,7 +58,7 @@
     steam-run
     streamlink-twitch-gui-bin
     tdesktop
-    thunderbird-wayland
+    thunderbird-wayland # Until thunderbird moves to using wayland by default
     tmux
     traceroute
     tree
