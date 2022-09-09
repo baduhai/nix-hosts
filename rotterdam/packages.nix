@@ -3,20 +3,20 @@
 {
   nixpkgs.config = {
     allowUnfree = true;
-    permittedInsecurePackages = [ "electron-11.5.0" ]; # Fuckin discord
+    packageOverrides = pkgs: {
+      baduhai = import (builtins.fetchTarball "https://github.com/baduhai/nur/archive/master.tar.gz") {
+        inherit pkgs;
+      };
+    };
   };
 
   environment.systemPackages = with pkgs; [
-    amdvlk
+    any-nix-shell
     arduino
     ark
     bat
     bitwarden
     chatterino2
-    cinny-desktop
-    cura
-    discord
-    element-desktop
     fd
     filelight
     firefox-wayland
@@ -26,74 +26,79 @@
     gnupg
     gocryptfs
     helvum
-    heroic
-    home-manager
+    # heroic
     inkscape
-    itch
-    kalendar
+    # itch
     kate
     kitty
     kolourpaint
+    libreoffice-qt
     mangohud
     megasync
     micro
     mpv
     neofetch
+    nix-index
     obs-studio
     obs-studio-plugins.obs-vkcapture
-    onlyoffice-bin
-    openrgb
-    p7zip
     partition-manager
     pass-wayland
     platformio
     polymc
     protonup
-    # prusa-slicer
+    prusa-slicer
     psst
     qbittorrent
-    qview
+    quickemu
     retroarchFull
     rpcs3
-    sc-controller
+    rssguard
     signal-desktop
     solvespace
     space-cadet-pinball
-    spotify
     steam
     steam-run
     streamlink-twitch-gui-bin
     tdesktop
     thunderbird-wayland
     tmux
+    traceroute
+    tree
     ungoogled-chromium
-    usbutils
+    unrar
     vagrant
     ventoy-bin
     virt-manager
-    vscode-fhs
     wget
     yakuake
     yuzu-ea
+    # App-specific overrides
     (appimage-run.override {
       extraPkgs = pkgs: [  ];
     })
+    # Packages from 3rd party channels
+    baduhai.koi
+    baduhai.emulationstation-de
   ];
 
-  programs.fish.enable = true;
-  programs.dconf.enable = true;
-  programs.droidcam.enable = true;
-  programs.kdeconnect.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-    pinentryFlavor = "qt";
+  programs = {
+    fish.enable = true;
+    dconf.enable = true;
+    droidcam.enable = true;
+    kdeconnect.enable = true;
+    gnupg.agent = {
+      enable = true;
+      enableSSHSupport = true;
+      pinentryFlavor = "qt";
+    };
   };
 
   fonts = {
-    fontDir.enable = true;
+  	fontDir.enable = true;
+  	fontconfig.enable = true;
     fonts = with pkgs; [
-    inter
+      inter
+      roboto
       (nerdfonts.override { fonts = [ "Hack" ]; })
     ];
   };

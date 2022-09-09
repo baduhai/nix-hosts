@@ -9,8 +9,11 @@
 
   boot = {
     plymouth.enable = true;
-    kernelPackages = pkgs.linuxPackages_zen;
-    kernelModules = [ "i2c-dev" "i2c-piix4" ];
+    kernelPackages = pkgs.linuxPackages_zen; # Zen kernel
+    kernelModules = [
+      "i2c-dev" # Required for arduino dev
+      "i2c-piix4" # Required for arduino dev
+    ];
     loader = {
       timeout = 1;
       systemd-boot.enable = true;
@@ -26,15 +29,16 @@
     hostName = "rotterdam";
     firewall = {
       enable = true;
+      checkReversePath = "loose"; # Tailscale mail fail without this
     };
   };
 
   sound.enable = true;
   hardware = {
     bluetooth.enable = true;
-    opengl.driSupport32Bit = true;
-    steam-hardware.enable = true;
-    pulseaudio.enable = false;
+    opengl.driSupport32Bit = true; # For OpenGL games
+    steam-hardware.enable = true; # Allow steam client to manage controllers
+    pulseaudio.enable = false; # Use pipewire instead
   };
 
   time.timeZone = "Europe/Berlin";
@@ -55,15 +59,17 @@
 
   services = {
     printing.enable = true;
-    fwupd.enable = true;
+    fwupd.enable = true; # Firmware upgrade service
     openssh.enable = true;
+    tailscale.enable = true;
+    flatpak.enable = true;
     pipewire = {
-        enable = true;
-        alsa.enable = true;
-        alsa.support32Bit = true;
-        pulse.enable = true;
-        jack.enable = true;
-        wireplumber.enable = true;
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+      jack.enable = true;
+      wireplumber.enable = true;
     };
     xserver = {
       enable = true;
@@ -72,8 +78,7 @@
       excludePackages = ( with pkgs; [ xterm ]);
       desktopManager.plasma5 = {
         enable     = true;
-        supportDDC = true;
-        excludePackages = ( with pkgs.plasma5Packages; [ elisa gwenview oxygen khelpcenter ]);
+        excludePackages = ( with pkgs.plasma5Packages; [ elisa oxygen khelpcenter ]);
       };
       displayManager = {
         defaultSession = "plasmawayland";
@@ -92,19 +97,19 @@
     };
   };
 
-  security.rtkit.enable = true;
+  security.rtkit.enable = true; # Needed for pipewire to acquire realtime priority
 
   virtualisation = {
     libvirtd.enable = true;
-    docker.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true; # Baisically aliases docker to podman
+    };
   };
 
   nix = {
-    extraOptions = ''
-      experimental-features = nix-command
-      experimental-features = nix-command flakes
-    '';
-    gc = {
+    extraOptions = "experimental-features = nix-command flakes";
+    gc = { # Garbage collector
       automatic = true;
       options = "--delete-older-than 8d";
     };

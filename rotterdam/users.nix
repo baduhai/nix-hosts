@@ -9,7 +9,13 @@
     isNormalUser = true;
     description = "William";
     shell = pkgs.fish;
-    extraGroups = [ "networkmanager" "wheel" "libvirtd" "docker" "uaccess" "dialout" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+      "libvirtd"
+      "uaccess" # Needed for HID dev
+      "dialout" # Needed for arduino dev
+    ];
     hashedPassword = "";
   };
 }
