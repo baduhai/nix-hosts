@@ -2,50 +2,51 @@
 
 {
   nixpkgs.config = {
-    allowUnfree = true;
+    allowUnfree = true; # Allow non open source packages 
   };
 
   environment.systemPackages = with pkgs; [
+    any-nix-shell # Use nix shell use any shell i.e. fish
     ark
     bat
     cinny-desktop
     clamav
     fd
     filelight
-    firefox-wayland
+    firefox-wayland # Until firefox moves to using wayland by default
     fzf
     gimp
     git
     gnupg
     gocryptfs
     helvum
-    kalendar
+    libsForQt5.kasts
     kate
+    kcalc
     keepassxc
-    kitty
     kolourpaint
+    kitty
     mattermost-desktop
     micro
     mpv
     mumble
     neofetch
+    nixfmt
     obs-studio
     onlyoffice-bin
+    openssl
     p7zip
-    partition-manager
-    pass-wayland
     psst
-    qview
     spotify
-    thunderbird-wayland
+    thunderbird-wayland # Until thunderbird moves to using wayland by default
     tmux
     ungoogled-chromium
     vagrant
     ventoy-bin
     virt-manager
-    vscode-fhs
     wget
     yakuake
+    # App-specific overrides
     (appimage-run.override {
       extraPkgs = pkgs: [  ];
     })
@@ -63,7 +64,8 @@
   fonts = {
     fontDir.enable = true;
     fonts = with pkgs; [
-    inter
+      inter
+      roboto
       (nerdfonts.override { fonts = [ "Hack" ]; })
     ];
   };

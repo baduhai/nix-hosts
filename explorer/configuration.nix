@@ -9,8 +9,7 @@
 
   boot = {
     plymouth.enable = true;
-    kernelPackages = pkgs.linuxPackages_zen;
-    kernelModules = [ "i2c-dev" "i2c-piix4" ];
+    kernelPackages = pkgs.linuxPackages_zen; # Zen kernel
     loader = {
       timeout = 1;
       systemd-boot.enable = true;
@@ -35,13 +34,14 @@
     hostName = "explorer";
     firewall = {
       enable = true;
+      checkReversePath = "loose"; # Tailscale may fail without this
     };
   };
 
   sound.enable = true;
   hardware = {
    bluetooth.enable = true;
-   pulseaudio.enable = false;
+   pulseaudio.enable = false; # Use pipewire instead
   };
 
   time.timeZone = "Europe/Berlin";
@@ -62,9 +62,15 @@
 
   services = {
     printing.enable = true;
-    fwupd.enable = true;
+    fwupd.enable = true; # Firmware upgrade service
     openssh.enable = true;
-    clamav = {
+    tailscale.enable = true;
+    flatpak.enable = true;
+    avahi = { # Needed for network printer discovery and support
+      enable = true;
+      nssmdns = true;
+    };
+    clamav = { # Antivirus
       daemon.enable = true;
       updater = {
         enable = true;
@@ -87,8 +93,7 @@
       excludePackages = ( with pkgs; [ xterm ]);
       desktopManager.plasma5 = {
         enable     = true;
-        supportDDC = true;
-        excludePackages = ( with pkgs.plasma5Packages; [ elisa gwenview oxygen khelpcenter ]);
+        excludePackages = ( with pkgs.plasma5Packages; [ elisa oxygen khelpcenter ]);
       };
       displayManager = {
         defaultSession = "plasmawayland";
@@ -107,19 +112,19 @@
     };
   };
 
-  security.rtkit.enable = true;
+  security.rtkit.enable = true; # Needed for pipewire to acquire realtime priority
 
   virtualisation = {
     libvirtd.enable = true;
-    docker.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true; # Baisically aliases docker to podman
+    };
   };
 
   nix = {
-    extraOptions = ''
-      experimental-features = nix-command
-      experimental-features = nix-command flakes
-    '';
-    gc = {
+    extraOptions = "experimental-features = nix-command flakes";
+    gc = { # Garbage collector
       automatic = true;
       options = "--delete-older-than 8d";
     };
