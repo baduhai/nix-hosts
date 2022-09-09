@@ -2,16 +2,16 @@
 
 {
   nixpkgs.config = {
-    allowUnfree = true;
+    allowUnfree = true; # Allow non open source packages
     packageOverrides = pkgs: {
-      baduhai = import (builtins.fetchTarball "https://github.com/baduhai/nur/archive/master.tar.gz") {
+      baduhai = import (builtins.fetchTarball "https://github.com/baduhai/nur/archive/master.tar.gz") { # Personal repo
         inherit pkgs;
       };
     };
   };
 
   environment.systemPackages = with pkgs; [
-    any-nix-shell
+    any-nix-shell # Use nix shell use any shell i.e. fish
     arduino
     ark
     bat
@@ -19,12 +19,12 @@
     chatterino2
     fd
     filelight
-    firefox-wayland
+    firefox-wayland # Until firefox moves to using wayland by default
     fzf
     gimp
     git
     gnupg
-    gocryptfs
+    gocryptfs # Encrypted vaults
     helvum
     # heroic
     inkscape
@@ -34,15 +34,13 @@
     kolourpaint
     libreoffice-qt
     mangohud
-    megasync
+    megasync # Soon to be dropped once nas is fully operational
     micro
     mpv
     neofetch
-    nix-index
     obs-studio
     obs-studio-plugins.obs-vkcapture
     partition-manager
-    pass-wayland
     platformio
     polymc
     protonup
